@@ -24,7 +24,7 @@ const QUESTIONS = [
     text: "Have you accomplished that one thing you promised yourself recently?",
     focus: "Your promise to yourself",
     lockEmoji: "🎯",
-    message: "That thing you promised yourself? That's the energy we're feeding today, not his DMs. Small steps still count.",
+    message: "That thing you promised yourself? That's the energy we're feeding today, not the ex's DMs. Small steps still count.",
     tasks: [
       "Write down the ONE thing you promised yourself",
       "Break it into a tiny 25-minute first step",
@@ -38,7 +38,7 @@ const QUESTIONS = [
     text: "Have you done some self-care today?",
     focus: "Self-care",
     lockEmoji: "🛁",
-    message: "You can't pour from an empty cup, babe. Give yourself the love you keep trying to give him.",
+    message: "You can't pour from an empty cup, babe. Give yourself the love you keep giving away.",
     tasks: [
       "Shower / skincare / hair, the full glow-up or just the basics",
       "Put on your comfiest fit or the one that makes you feel cute",
@@ -63,7 +63,7 @@ const QUESTIONS = [
   {
     type: "ex",
     emoji: "👀",
-    text: "Okay, last one. Be honest: are you getting back together with him?",
+    text: "Okay, last one. Be honest: are you getting back together with your ex?",
   },
 ];
 
@@ -293,7 +293,7 @@ const timer = {
 };
 const SUBS = {
   focus: "Phone face down. You're locked in. 🔒",
-  short: "Stretch, sip water, NO scrolling his IG 👀",
+  short: "Stretch, sip water, NO scrolling the ex's IG 👀",
   long: "Big break, you earned it queen 👑",
 };
 const ring = $("ring-fg");
@@ -445,6 +445,47 @@ function confetti(n = 60) {
     s.style.animationDelay = -Math.random() * 20 + "s";
     wrap.append(s);
   }
+})();
+
+/* ---------- color themes ---------- */
+const THEMES = [
+  { id: "pink", name: "Pink Princess", color: "#ff5fa2" },
+  { id: "lavender", name: "Lavender Haze", color: "#a46bff" },
+  { id: "peach", name: "Peachy", color: "#ff8a5c" },
+  { id: "matcha", name: "Matcha", color: "#4cb782" },
+  { id: "baby-blue", name: "Baby Blue", color: "#4ea8f0" },
+  { id: "cherry", name: "Cherry", color: "#e63950" },
+  { id: "pride", name: "Pride", color: "conic-gradient(#ff6b6b, #ffb36b, #ffe66b, #6bdc8b, #6bb8ff, #b46bff, #ff6b6b)" },
+  { id: "midnight", name: "Midnight", color: "#2a1433" },
+];
+
+function currentTheme() { return document.documentElement.dataset.theme || "pink"; }
+
+function applyTheme(id) {
+  if (id === "pink") delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = id;
+  try { localStorage.setItem("icm-theme", id); } catch (_) {}
+  document.querySelectorAll(".swatch").forEach((b) => b.setAttribute("aria-pressed", b.dataset.theme === id));
+}
+
+(function buildThemePicker() {
+  const wrap = $("swatches");
+  THEMES.forEach((t) => {
+    const b = document.createElement("button");
+    b.className = "swatch";
+    b.dataset.theme = t.id;
+    b.setAttribute("aria-pressed", t.id === currentTheme());
+    const dot = document.createElement("i");
+    dot.style.background = t.color;
+    b.append(dot, document.createTextNode(t.name));
+    b.addEventListener("click", () => { applyTheme(t.id); track(`theme-${t.id}`); });
+    wrap.append(b);
+  });
+  const toggle = $("theme-toggle"), menu = $("theme-menu");
+  const setOpen = (open) => { menu.hidden = !open; toggle.setAttribute("aria-expanded", open); };
+  toggle.addEventListener("click", (e) => { e.stopPropagation(); setOpen(menu.hidden); });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".theme-picker")) setOpen(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
 })();
 
 /* ---------- wire up ---------- */

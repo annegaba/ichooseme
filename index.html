@@ -12,16 +12,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>try { var t = localStorage.getItem("icm-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 </head>
 <body>
   <div class="sparkles" aria-hidden="true"></div>
+
+  <div class="theme-picker">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Pick your color theme" aria-expanded="false" aria-controls="theme-menu">🎨</button>
+    <div class="theme-menu" id="theme-menu" hidden>
+      <p>Pick your vibe ✨</p>
+      <div class="swatches" id="swatches"></div>
+    </div>
+  </div>
 
   <main class="card" id="app" aria-live="polite">
     <!-- Intro -->
     <section class="screen active" id="screen-intro">
       <p class="eyebrow">✨ before you hit send ✨</p>
       <h1 class="logo">I Choose Me</h1>
-      <p class="lead">Thumb hovering over his name again? Put the phone down for one sec, girlie. Answer 5 tiny questions first.</p>
+      <p class="lead">Thumb hovering over your ex's name again? Put the phone down for one sec, girlie. Answer 5 tiny questions first.</p>
       <button class="btn btn-primary" id="start-btn">Let's do this 💅</button>
     </section>
 
@@ -103,7 +112,7 @@
     <div class="toast-card">
       <div class="toast-emoji">🤨</div>
       <p class="toast-title">You think you sneaky huh?</p>
-      <p>You still ain't getting back together with him.</p>
+      <p>You still ain't getting back together with your ex.</p>
       <button class="btn btn-primary" id="toast-close">Okay fine 🙄</button>
     </div>
   </div>
@@ -118,7 +127,7 @@
     <div class="lines"><span></span><span></span></div>
     <h3>Pomodoros (color one in per session 🍅)</h3>
     <div class="tomatoes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <h3>Instead of texting him, I will…</h3>
+    <h3>Instead of texting my ex, I will…</h3>
     <div class="lines"><span></span><span></span><span></span></div>
     <h3>3 things I love about me</h3>
     <ol class="print-loves"><li></li><li></li><li></li></ol>
