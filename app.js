@@ -419,61 +419,60 @@ function printSheet() {
   window.print();
 }
 
-/* ---------- fun stuff ---------- */
-function confetti(n = 60) {
-  const bits = ["💖", "✨", "🎀", "💅", "🌸", "💕", "👑"];
-  for (let i = 0; i < n; i++) {
-    const s = document.createElement("span");
-    s.className = "confetti";
-    s.textContent = bits[Math.floor(Math.random() * bits.length)];
-    s.style.left = Math.random() * 100 + "vw";
-    s.style.animationDuration = 2 + Math.random() * 2.5 + "s";
-    s.style.animationDelay = Math.random() * 0.6 + "s";
-    document.body.append(s);
-    setTimeout(() => s.remove(), 5500);
-  }
-}
-
-(function sparkles() {
-  const wrap = document.querySelector(".sparkles");
-  const bits = ["💖", "✨", "🌸", "💕", "🎀"];
-  for (let i = 0; i < 14; i++) {
-    const s = document.createElement("span");
-    s.textContent = bits[i % bits.length];
-    s.style.left = Math.random() * 100 + "vw";
-    s.style.animationDuration = 10 + Math.random() * 12 + "s";
-    s.style.animationDelay = -Math.random() * 20 + "s";
-    wrap.append(s);
-  }
-})();
-
 /* ---------- color themes ---------- */
+const DEFAULT_SPARKLES = ["💖", "✨", "🌸", "💕", "🎀"];
+const DEFAULT_CONFETTI = ["💖", "✨", "🎀", "💅", "🌸", "💕", "👑"];
+
 const THEMES = [
-  { id: "pink", name: "Pink Princess", color: "#ff5fa2" },
-  { id: "lavender", name: "Lavender Haze", color: "#a46bff" },
-  { id: "peach", name: "Peachy", color: "#ff8a5c" },
-  { id: "matcha", name: "Matcha", color: "#4cb782" },
-  { id: "baby-blue", name: "Baby Blue", color: "#4ea8f0" },
-  { id: "cherry", name: "Cherry", color: "#e63950" },
-  { id: "pride", name: "Pride", color: "conic-gradient(#ff6b6b, #ffb36b, #ffe66b, #6bdc8b, #6bb8ff, #b46bff, #ff6b6b)" },
-  { id: "midnight", name: "Midnight", color: "#2a1433" },
+  { id: "pink", group: "Colors", name: "Pink Princess", color: "#ff5fa2" },
+  { id: "lavender", group: "Colors", name: "Lavender Haze", color: "#a46bff" },
+  { id: "peach", group: "Colors", name: "Peachy", color: "#ff8a5c" },
+  { id: "matcha", group: "Colors", name: "Matcha", color: "#4cb782" },
+  { id: "baby-blue", group: "Colors", name: "Baby Blue", color: "#4ea8f0" },
+  { id: "cherry", group: "Colors", name: "Cherry", color: "#e63950" },
+  { id: "pride", group: "Colors", name: "Pride", color: "conic-gradient(#ff6b6b, #ffb36b, #ffe66b, #6bdc8b, #6bb8ff, #b46bff, #ff6b6b)" },
+  { id: "midnight", group: "Colors", name: "Midnight", color: "#2a1433" },
+  { id: "fairy", group: "Colors", name: "Fairy Magic", color: "linear-gradient(135deg, #ff3ea5, #a855f7, #33d1c4)",
+    emojis: ["🧚‍♀️", "🦋", "✨", "💫", "🌟", "💖", "🪄"] },
+  { id: "spring", group: "Season girlies", name: "Spring", color: "linear-gradient(135deg, #ff7eb3, #9be29b)",
+    emojis: ["🌷", "🌸", "🦋", "🌼", "🐝", "🌱", "💐"] },
+  { id: "summer", group: "Season girlies", name: "Summer", color: "linear-gradient(135deg, #ff7a45, #2ec4d6)",
+    emojis: ["☀️", "🌊", "🍉", "🌺", "🐚", "🍓", "🕶️"] },
+  { id: "autumn", group: "Season girlies", name: "Autumn", color: "linear-gradient(135deg, #d9772b, #a3552f)",
+    emojis: ["🍂", "🍁", "🎃", "☕", "🍄", "🧡", "🥧"] },
+  { id: "winter", group: "Season girlies", name: "Winter", color: "linear-gradient(135deg, #5f8fd9, #c6b4ff)",
+    emojis: ["❄️", "⛄", "🧣", "☕", "🎄", "✨", "🤍"] },
 ];
 
 function currentTheme() { return document.documentElement.dataset.theme || "pink"; }
+function themeEmojis(kind) {
+  const t = THEMES.find((x) => x.id === currentTheme());
+  if (t && t.emojis) return t.emojis;
+  return kind === "confetti" ? DEFAULT_CONFETTI : DEFAULT_SPARKLES;
+}
 
 function applyTheme(id) {
   if (id === "pink") delete document.documentElement.dataset.theme;
   else document.documentElement.dataset.theme = id;
   try { localStorage.setItem("icm-theme", id); } catch (_) {}
-  document.querySelectorAll(".swatch").forEach((b) => b.setAttribute("aria-pressed", b.dataset.theme === id));
+  document.querySelectorAll(".swatch").forEach((b) => b.setAttribute("aria-pressed", b.dataset.id === id));
+  renderSparkles();
 }
 
 (function buildThemePicker() {
   const wrap = $("swatches");
+  let group = null;
   THEMES.forEach((t) => {
+    if (t.group !== group) {
+      group = t.group;
+      const h = document.createElement("p");
+      h.className = "swatch-group";
+      h.textContent = group === "Colors" ? "Colors 🎨" : `${group} 🌷☀️🍂❄️`;
+      wrap.append(h);
+    }
     const b = document.createElement("button");
     b.className = "swatch";
-    b.dataset.theme = t.id;
+    b.dataset.id = t.id;
     b.setAttribute("aria-pressed", t.id === currentTheme());
     const dot = document.createElement("i");
     dot.style.background = t.color;
@@ -487,6 +486,36 @@ function applyTheme(id) {
   document.addEventListener("click", (e) => { if (!e.target.closest(".theme-picker")) setOpen(false); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
 })();
+
+/* ---------- fun stuff ---------- */
+function confetti(n = 60) {
+  const bits = themeEmojis("confetti");
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement("span");
+    s.className = "confetti";
+    s.textContent = bits[Math.floor(Math.random() * bits.length)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = 2 + Math.random() * 2.5 + "s";
+    s.style.animationDelay = Math.random() * 0.6 + "s";
+    document.body.append(s);
+    setTimeout(() => s.remove(), 5500);
+  }
+}
+
+function renderSparkles() {
+  const wrap = document.querySelector(".sparkles");
+  const bits = themeEmojis("sparkles");
+  wrap.innerHTML = "";
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement("span");
+    s.textContent = bits[i % bits.length];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = 10 + Math.random() * 12 + "s";
+    s.style.animationDelay = -Math.random() * 20 + "s";
+    wrap.append(s);
+  }
+}
+renderSparkles();
 
 /* ---------- wire up ---------- */
 $("start-btn").addEventListener("click", startQuiz);
