@@ -3,8 +3,8 @@
    ============================================================ */
 
 const CONFIG = {
-  channelName: "@AnneGabaa",                   // shows in the footer
-  channelUrl: "https://www.youtube.com/@AnneGabaa",
+  channelName: "@loveannegaba",                // shows in the footer
+  channelUrl: "https://www.youtube.com/@loveannegaba",
   tipUrl: "",                                   // e.g. https://buymeacoffee.com/yourname — button hides while empty
   tipLabel: "☕ Buy me a coffee",
   siteUrl: "",                                  // printed at the bottom of the sheet (optional)
