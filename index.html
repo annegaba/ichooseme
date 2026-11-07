@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I Choose Me 💖</title>
+  <meta name="description" content="About to text your ex? Take the I Choose Me check-in first, girlie.">
+  <meta property="og:title" content="I Choose Me 💖">
+  <meta property="og:description" content="About to text your ex? Take this check-in first, girlie.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"></div>
+
+  <main class="card" id="app" aria-live="polite">
+    <!-- Intro -->
+    <section class="screen active" id="screen-intro">
+      <p class="eyebrow">✨ before you hit send ✨</p>
+      <h1 class="logo">I Choose Me</h1>
+      <p class="lead">Thumb hovering over his name again? Put the phone down for one sec, girlie. Answer 5 tiny questions first.</p>
+      <button class="btn btn-primary" id="start-btn">Let's do this 💅</button>
+    </section>
+
+    <!-- Question -->
+    <section class="screen" id="screen-question">
+      <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+      <p class="eyebrow" id="q-count">Question 1 of 5</p>
+      <div class="q-emoji" id="q-emoji">💔</div>
+      <h2 class="question" id="q-text"></h2>
+      <div class="answers" id="answers">
+        <button class="btn btn-yes" id="yes-btn">Yes</button>
+        <button class="btn btn-no" id="no-btn">No</button>
+      </div>
+    </section>
+
+    <!-- Lock in -->
+    <section class="screen" id="screen-lockin">
+      <p class="eyebrow">not a fail, just a focus 🎀</p>
+      <h1 class="logo">Lock In, Girliepop!</h1>
+      <div class="focus-pill"><span id="lock-emoji">🎯</span> Focus: <strong id="lock-title"></strong></div>
+      <p class="lead" id="lock-message"></p>
+      <ul class="checklist" id="lock-list"></ul>
+      <div class="row">
+        <button class="btn btn-primary" id="open-timer-btn">⏱️ Pomodoro timer</button>
+        <button class="btn btn-soft" id="print-btn">🖨️ Print my lock-in sheet</button>
+      </div>
+      <button class="link-btn" id="restart-from-lock">↺ Take the check-in again</button>
+    </section>
+
+    <!-- Win -->
+    <section class="screen" id="screen-win">
+      <p class="eyebrow">main character energy 👑</p>
+      <h1 class="logo">You got this, girlie!</h1>
+      <p class="lead">You know what to do. Now say it out loud:</p>
+      <p class="affirmation">"I choose me!"</p>
+      <button class="btn btn-primary" id="said-it-btn">I said it! 💖</button>
+      <div class="row">
+        <button class="btn btn-soft" id="win-timer-btn">⏱️ Lock in with a timer</button>
+        <button class="btn btn-soft" id="win-print-btn">🖨️ Print my sheet</button>
+      </div>
+      <button class="link-btn" id="restart-from-win">↺ Start over</button>
+    </section>
+  </main>
+
+  <!-- Pomodoro -->
+  <aside class="timer-panel" id="timer-panel" hidden>
+    <div class="timer-card" role="dialog" aria-modal="true" aria-labelledby="timer-heading">
+      <button class="close-btn" id="timer-close" aria-label="Close timer">✕</button>
+      <h2 id="timer-heading" class="timer-heading">Pomodoro 🍅</h2>
+      <div class="modes" role="tablist">
+        <button class="mode active" data-mode="focus" role="tab">Focus</button>
+        <button class="mode" data-mode="short" role="tab">Short break</button>
+        <button class="mode" data-mode="long" role="tab">Long break</button>
+      </div>
+      <div class="ring">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="ring-time" id="timer-display">25:00</div>
+      </div>
+      <p class="timer-sub" id="timer-sub">Phone face down. You're locked in. 🔒</p>
+      <div class="row">
+        <button class="btn btn-primary" id="timer-toggle">Start</button>
+        <button class="btn btn-soft" id="timer-reset">Reset</button>
+      </div>
+      <p class="tally">Sessions done today: <strong id="tally">0</strong> <span id="tally-hearts"></span></p>
+      <details class="settings">
+        <summary>Custom minutes</summary>
+        <label>Focus <input type="number" id="set-focus" min="1" max="120" value="25"></label>
+        <label>Short <input type="number" id="set-short" min="1" max="60" value="5"></label>
+        <label>Long <input type="number" id="set-long" min="1" max="60" value="15"></label>
+      </details>
+    </div>
+  </aside>
+
+  <!-- Sneaky popup -->
+  <div class="toast" id="toast" role="alert" hidden>
+    <div class="toast-card">
+      <div class="toast-emoji">🤨</div>
+      <p class="toast-title">You think you sneaky huh?</p>
+      <p>You still ain't getting back together with him.</p>
+      <button class="btn btn-primary" id="toast-close">Okay fine 🙄</button>
+    </div>
+  </div>
+
+  <!-- Printable sheet (only shows when printing) -->
+  <section class="print-sheet" id="print-sheet" aria-hidden="true">
+    <h1>I Choose Me 💖 Lock-In Sheet</h1>
+    <p class="print-date">Date: ______________________</p>
+    <h2>Today I'm locking in on: <span id="print-focus"></span></h2>
+    <ul class="print-list" id="print-list"></ul>
+    <h3>My one big thing today</h3>
+    <div class="lines"><span></span><span></span></div>
+    <h3>Pomodoros (color one in per session 🍅)</h3>
+    <div class="tomatoes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h3>Instead of texting him, I will…</h3>
+    <div class="lines"><span></span><span></span><span></span></div>
+    <h3>3 things I love about me</h3>
+    <ol class="print-loves"><li></li><li></li><li></li></ol>
+    <p class="print-affirm">Say it out loud: "I choose me!"</p>
+    <p class="print-foot" id="print-foot"></p>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with 💖 for the girlies by <a id="channel-link" href="#" target="_blank" rel="noopener">@yourchannel</a></p>
+    <p class="tiny">Free forever. No sign-ups, no subscriptions.</p>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!--
+    Visitor counter (free): sign up at https://www.goatcounter.com, pick a code
+    (e.g. "ichooseme"), then replace YOURCODE below and remove the comment marks.
+    <script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  -->
+</body>
+</html>
