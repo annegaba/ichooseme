@@ -3,8 +3,10 @@
    ============================================================ */
 
 const CONFIG = {
-  channelName: "@yourchannel",                 // shows in the footer
-  channelUrl: "https://www.youtube.com/@yourchannel",
+  channelName: "@AnneGabaa",                   // shows in the footer
+  channelUrl: "https://www.youtube.com/@AnneGabaa",
+  tipUrl: "",                                   // e.g. https://buymeacoffee.com/yourname — button hides while empty
+  tipLabel: "☕ Buy me a coffee",
   siteUrl: "",                                  // printed at the bottom of the sheet (optional)
 };
 
@@ -465,4 +467,12 @@ document.addEventListener("keydown", (e) => {
 const link = $("channel-link");
 link.textContent = CONFIG.channelName;
 link.href = CONFIG.channelUrl;
+link.addEventListener("click", () => track("channel-click"));
+if (CONFIG.tipUrl) {
+  const tip = $("tip-link");
+  tip.href = CONFIG.tipUrl;
+  tip.textContent = CONFIG.tipLabel;
+  tip.hidden = false;
+  tip.addEventListener("click", () => track("tip-click"));
+}
 setMode("focus");
