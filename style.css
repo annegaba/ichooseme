@@ -419,23 +419,69 @@ body {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
-/* ---------- printable lock-in sheet ---------- */
+/* ---------- add to home screen ---------- */
+.home-card { max-width: 420px; }
+.home-icon {
+  display: block; margin: 0 auto 8px; border-radius: 20px;
+  image-rendering: pixelated; box-shadow: var(--shadow);
+}
+.home-card .modes { margin: 14px 0 6px; }
+.install-btn { margin: 10px auto 0; display: block; }
+.install-btn[hidden] { display: none; }
+.home-steps { text-align: left; padding-left: 0; margin: 14px 0 0; list-style: none; counter-reset: step; }
+.home-steps[hidden] { display: none; }
+.home-steps li {
+  counter-increment: step; position: relative; padding: 10px 12px 10px 48px; margin: 8px 0;
+  background: var(--surface); border: 2px solid var(--pink-soft); border-radius: 16px; line-height: 1.45;
+}
+.home-steps li::before {
+  content: counter(step); position: absolute; left: 12px; top: 10px;
+  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--pink); color: #fff; font-weight: 700; font-size: 0.9rem;
+}
+.home-steps .key { white-space: nowrap; }
+.home-btn { display: block; margin: 14px auto 0; }
+.home-btn[hidden] { display: none; }
+
+/* ---------- printable lock-in sheet (uses the current theme) ---------- */
 @media print {
-  @page { margin: 14mm; }
-  body { background: #fff; display: block; padding: 0; color: #333; }
+  @page { margin: 0; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  html, body { height: auto; }
+  body { display: block; min-height: 0; padding: 10mm 12mm; overflow: visible; }
   .sparkles, .card, .timer-panel, .theme-picker, .toast, .site-footer, .confetti { display: none !important; }
-  .print-sheet { display: block; font-family: "Quicksand", sans-serif; }
-  .print-sheet h1 { font-family: "Pacifico", cursive; font-weight: 400; color: #e83e8c; font-size: 26pt; margin: 0 0 4px; }
-  .print-sheet h2 { font-size: 15pt; margin: 14px 0 6px; }
-  .print-sheet h3 { font-size: 12pt; margin: 18px 0 6px; color: #e83e8c; }
-  .print-date { margin: 0; }
-  .print-list { list-style: none; padding: 0; margin: 0; }
-  .print-list li { margin: 6px 0; font-size: 11.5pt; }
-  .print-list li::before { content: "☐ "; font-size: 14pt; }
-  .lines span { display: block; border-bottom: 1.5px dashed #e7a3c3; height: 28px; }
-  .tomatoes { display: flex; gap: 10px; }
-  .tomatoes i { width: 30px; height: 30px; border: 2px solid #e83e8c; border-radius: 50%; }
-  .print-loves li { border-bottom: 1.5px dashed #e7a3c3; height: 28px; margin-bottom: 4px; }
-  .print-affirm { font-family: "Pacifico", cursive; font-size: 20pt; color: #e83e8c; text-align: center; margin: 24px 0 6px; }
-  .print-foot { text-align: center; font-size: 9pt; color: #999; }
+  * { animation: none !important; transition: none !important; }
+
+  .print-sheet { display: block; color: var(--ink); }
+  .print-decor { text-align: center; font-size: 15pt; letter-spacing: 2px; margin: 0 0 5mm; opacity: 0.9; }
+  #print-decor-bottom { margin: 5mm 0 0; }
+  .print-card {
+    background: var(--card); border: 3px solid var(--card-border); border-radius: 22px;
+    box-shadow: 0 6px 0 var(--pink-soft); padding: 8mm 10mm 6mm; text-align: left;
+    break-inside: avoid;
+  }
+  .print-card .eyebrow, .print-card .logo { text-align: center; }
+  .print-card .logo { font-size: 30pt; margin: 0 0 4mm; }
+  .print-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 3mm; }
+  .print-meta .focus-pill { margin: 0; }
+  .print-date { font-weight: 600; color: var(--ink-soft); }
+  .print-card h3 { color: var(--pink-deep); font-size: 12pt; margin: 5mm 0 2mm; }
+  .print-card h3 small { font-weight: 600; color: var(--ink-soft); font-size: 9pt; }
+  .print-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; }
+  .print-list li {
+    background: var(--surface); border: 2px solid var(--pink-soft); border-radius: 14px;
+    padding: 2.5mm 3mm 2.5mm 10mm; position: relative; font-size: 10.5pt; line-height: 1.35;
+  }
+  .print-list li::before {
+    content: ""; position: absolute; left: 3mm; top: 2.8mm; width: 4mm; height: 4mm;
+    border: 2px solid var(--pink); border-radius: 4px; background: var(--surface);
+  }
+  .print-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+  .lines span { display: block; border-bottom: 2px dashed var(--pink-soft); height: 10mm; }
+  .tomatoes { display: grid; grid-template-columns: repeat(8, 1fr); gap: 1.8mm; padding-top: 2mm; }
+  .tomatoes i { aspect-ratio: 1; border: 2.5px solid var(--pink); border-radius: 50%; background: var(--surface); }
+  .print-loves { margin: 0; padding-left: 6mm; color: var(--pink-deep); font-weight: 700; }
+  .print-loves li { border-bottom: 2px dashed var(--pink-soft); height: 9mm; }
+  .print-card .affirmation { font-size: 24pt; margin: 6mm 0 2mm; text-align: center; }
+  .print-foot { text-align: center; font-size: 8.5pt; color: var(--ink-soft); margin: 0; }
 }

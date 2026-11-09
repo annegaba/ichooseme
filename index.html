@@ -7,7 +7,14 @@
   <meta name="description" content="About to text your ex? Take the I Choose Me check-in first, girlie.">
   <meta property="og:title" content="I Choose Me 💖">
   <meta property="og:description" content="About to text your ex? Take this check-in first, girlie.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+  <link rel="icon" type="image/png" href="icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#ff6fae">
+  <meta name="apple-mobile-web-app-title" content="I Choose Me">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta property="og:image" content="https://annegaba.github.io/ichooseme/icons/icon-512.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
@@ -32,6 +39,7 @@
       <h1 class="logo">I Choose Me</h1>
       <p class="lead">Thumb hovering over your ex's name again? Put the phone down for one sec, girlie. Answer 5 tiny questions first.</p>
       <button class="btn btn-primary" id="start-btn">Let's do this 💅</button>
+      <button class="link-btn home-btn" data-open-home>📲 Save it to your home screen</button>
     </section>
 
     <!-- Question -->
@@ -72,6 +80,7 @@
         <button class="btn btn-soft" id="win-print-btn">🖨️ Print my sheet</button>
       </div>
       <button class="link-btn" id="restart-from-win">↺ Start over</button>
+      <button class="link-btn home-btn" data-open-home>📲 Keep me on your home screen for next time</button>
     </section>
   </main>
 
@@ -107,6 +116,33 @@
     </div>
   </aside>
 
+  <!-- Add to home screen how-to -->
+  <aside class="timer-panel" id="home-panel" hidden>
+    <div class="timer-card home-card" role="dialog" aria-modal="true" aria-labelledby="home-heading">
+      <button class="close-btn" id="home-close" aria-label="Close">✕</button>
+      <img class="home-icon" src="icons/icon-192.png" alt="I heart me app icon" width="84" height="84">
+      <h2 id="home-heading" class="timer-heading">Save me to your home screen</h2>
+      <p class="timer-sub">One tap away next time the urge hits 💖</p>
+      <div class="modes" role="tablist">
+        <button class="mode" data-os="ios" role="tab">iPhone</button>
+        <button class="mode" data-os="android" role="tab">Android</button>
+      </div>
+      <button class="btn btn-primary install-btn" id="install-btn" hidden>📲 Install now</button>
+      <ol class="home-steps" data-steps="ios">
+        <li><b>Open this page in Safari.</b> Came from Instagram, TikTok or YouTube? Tap <b>•••</b> and pick <b>Open in browser</b> first.</li>
+        <li>Tap the <b>Share</b> button <span class="key">⬆️</span> at the bottom. On newer iPhones, tap <b>•••</b> first, then <b>Share</b>.</li>
+        <li>Scroll down and tap <b>Add to Home Screen</b> <span class="key">➕</span></li>
+        <li>Tap <b>Add</b>. That's it, girlie! 🎀</li>
+      </ol>
+      <ol class="home-steps" data-steps="android" hidden>
+        <li><b>Open this page in Chrome.</b> In an app's browser? Tap <b>⋮</b> and pick <b>Open in Chrome</b> first.</li>
+        <li>Tap the <b>⋮</b> menu in the top-right corner.</li>
+        <li>Tap <b>Add to Home screen</b> (or <b>Install app</b>).</li>
+        <li>Tap <b>Add</b> or <b>Install</b>. That's it, girlie! 🎀</li>
+      </ol>
+    </div>
+  </aside>
+
   <!-- Sneaky popup -->
   <div class="toast" id="toast" role="alert" hidden>
     <div class="toast-card">
@@ -119,25 +155,39 @@
 
   <!-- Printable sheet (only shows when printing) -->
   <section class="print-sheet" id="print-sheet" aria-hidden="true">
-    <h1>I Choose Me 💖 Lock-In Sheet</h1>
-    <p class="print-date">Date: ______________________</p>
-    <h2>Today I'm locking in on: <span id="print-focus"></span></h2>
-    <ul class="print-list" id="print-list"></ul>
-    <h3>My one big thing today</h3>
-    <div class="lines"><span></span><span></span></div>
-    <h3>Pomodoros (color one in per session 🍅)</h3>
-    <div class="tomatoes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-    <h3>Instead of texting my ex, I will…</h3>
-    <div class="lines"><span></span><span></span><span></span></div>
-    <h3>3 things I love about me</h3>
-    <ol class="print-loves"><li></li><li></li><li></li></ol>
-    <p class="print-affirm">Say it out loud: "I choose me!"</p>
-    <p class="print-foot" id="print-foot"></p>
+    <div class="print-decor" id="print-decor-top"></div>
+    <div class="print-card">
+      <p class="eyebrow">✨ my lock-in sheet ✨</p>
+      <h1 class="logo">I Choose Me</h1>
+      <div class="print-meta">
+        <span class="focus-pill">Locking in on: <strong id="print-focus"></strong></span>
+        <span class="print-date">Date: ________________</span>
+      </div>
+      <ul class="print-list" id="print-list"></ul>
+      <div class="print-cols">
+        <div>
+          <h3>My one big thing today</h3>
+          <div class="lines"><span></span><span></span></div>
+        </div>
+        <div>
+          <h3>Pomodoros 🍅 <small>color one in per session</small></h3>
+          <div class="tomatoes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <h3>Instead of texting my ex, I will…</h3>
+      <div class="lines"><span></span><span></span><span></span></div>
+      <h3>3 things I love about me</h3>
+      <ol class="print-loves"><li></li><li></li><li></li></ol>
+      <p class="affirmation">"I choose me!"</p>
+      <p class="print-foot" id="print-foot"></p>
+    </div>
+    <div class="print-decor" id="print-decor-bottom"></div>
   </section>
 
   <footer class="site-footer">
     <p>Made with 💖 for the girlies by <a id="channel-link" href="#" target="_blank" rel="noopener">@yourchannel</a></p>
-    <p><a class="tip-btn" id="tip-link" href="#" target="_blank" rel="noopener" hidden></a></p>  </footer>
+    <p><a class="tip-btn" id="tip-link" href="#" target="_blank" rel="noopener" hidden></a></p>
+  </footer>
 
   <script src="app.js"></script>
 

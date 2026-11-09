@@ -403,7 +403,8 @@ document.querySelectorAll(".mode").forEach((b) => b.addEventListener("click", ()
 });
 
 /* ---------- printable sheet ---------- */
-function printSheet() {
+// Fills the sheet with the current focus + theme emojis. Runs on the Print button and on Ctrl+P.
+function preparePrint() {
   const q = lastFocus;
   $("print-focus").textContent = q ? `${q.focus} ${q.lockEmoji}` : "Choosing me 👑";
   const ul = $("print-list");
@@ -415,9 +416,54 @@ function printSheet() {
   });
   const site = CONFIG.siteUrl || location.href.split("#")[0];
   $("print-foot").textContent = `I Choose Me 💖 by ${CONFIG.channelName} · ${site}`;
+  const bits = themeEmojis("sparkles");
+  const row = Array.from({ length: 12 }, (_, i) => bits[i % bits.length]).join("  ");
+  $("print-decor-top").textContent = row;
+  $("print-decor-bottom").textContent = row;
+}
+
+function printSheet() {
+  preparePrint();
   track("print");
   window.print();
 }
+window.addEventListener("beforeprint", preparePrint);
+
+/* ---------- add to home screen ---------- */
+let installPrompt = null;
+const isStandalone = () =>
+  window.navigator.standalone === true || window.matchMedia("(display-mode: standalone)").matches;
+
+function setHomeOS(os) {
+  document.querySelectorAll("[data-os]").forEach((b) => b.classList.toggle("active", b.dataset.os === os));
+  document.querySelectorAll("[data-steps]").forEach((ol) => { ol.hidden = ol.dataset.steps !== os; });
+}
+
+function openHome() {
+  setHomeOS(/android/i.test(navigator.userAgent) ? "android" : "ios");
+  $("install-btn").hidden = !installPrompt;
+  $("home-panel").hidden = false;
+  track("homescreen-open");
+}
+
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installPrompt = e; });
+$("install-btn").addEventListener("click", async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  const { outcome } = await installPrompt.userChoice;
+  if (outcome === "accepted") track("homescreen-installed");
+  installPrompt = null;
+  $("home-panel").hidden = true;
+});
+document.querySelectorAll("[data-os]").forEach((b) => b.addEventListener("click", () => setHomeOS(b.dataset.os)));
+document.querySelectorAll("[data-open-home]").forEach((b) => {
+  if (isStandalone()) b.hidden = true; // already on the home screen
+  b.addEventListener("click", openHome);
+});
+$("home-close").addEventListener("click", () => { $("home-panel").hidden = true; });
+$("home-panel").addEventListener("click", (e) => { if (e.target.id === "home-panel") $("home-panel").hidden = true; });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("home-panel").hidden = true; });
+if (isStandalone()) track("opened-from-homescreen");
 
 /* ---------- color themes ---------- */
 const DEFAULT_SPARKLES = ["💖", "✨", "🌸", "💕", "🎀"];
