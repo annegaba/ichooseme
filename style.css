@@ -183,6 +183,9 @@ body {
   box-shadow: var(--shadow);
   padding: 36px 28px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .screen { display: none; }
