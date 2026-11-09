@@ -6,7 +6,7 @@ const CONFIG = {
   channelName: "@loveannegaba",                // shows in the footer
   channelUrl: "https://www.youtube.com/@loveannegaba",
   tipUrl: "https://ko-fi.com/annegaba",         // footer tip button (hides if empty)
-  tipLabel: "☕ Support me on Ko-fi",
+  tipLabel: "☕ Ko-fi",
   siteUrl: "",                                  // printed at the bottom of the sheet (optional)
 };
 

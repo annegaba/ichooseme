@@ -397,11 +397,17 @@ body {
 .site-footer p { margin: 4px 0; }
 .tiny { font-size: 0.8rem; opacity: 0.8; }
 .tip-btn {
-  display: inline-block; margin: 8px 0 2px; padding: 9px 20px; border-radius: 99px;
-  background: var(--surface); border: 2px solid var(--pink-soft); text-decoration: none; font-weight: 700;
+  position: fixed; left: 14px; bottom: 14px; z-index: 15;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 700;
+  background: var(--surface); color: var(--pink-deep); border: 2px solid var(--pink-soft);
+  text-decoration: none; box-shadow: var(--shadow);
   transition: transform 0.15s;
 }
-.tip-btn:hover { transform: translateY(-2px) scale(1.03); }
+.tip-btn:hover { transform: translateY(-2px) scale(1.05); }
+@media (max-width: 600px) {
+  body { padding-bottom: 64px; }
+}
 .tip-btn[hidden] { display: none; }
 
 .print-sheet { display: none; }
